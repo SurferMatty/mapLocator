@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
 
+    //Fetches map tiles
      satellite  = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy <a href="https://www.mapbox.com/">Mapbox</a>',
         id: 'mapbox/satellite-v9',
@@ -26,18 +27,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
         accessToken: 'pk.eyJ1Ijoic3VyZmVybWF0dHkiLCJhIjoiY2tmZmNqNW5iMDJ4czJ5czVlb3d6NHE1MiJ9.LiizRcnyCW3sapN-bDONOQ'
     });
 
+
     mymap = L.map('mapid', {
         zoom: 5,
-        layers: [streets, satellite]
+        layers: [streets, satellite],
     });
 
     
 	var baseLayers = {
         "Satellite": satellite,
-        "Streets": streets
-	};
+        "Streets": streets,
+    };
+
 
     L.control.layers(baseLayers).addTo(mymap);
+
+    //Adds scale
+    L.control.scale({
+        position: "bottomleft",
+        imperial: true
+    }).addTo(mymap);
+
 
     fetchMap(latitude, longitude);
 
@@ -95,6 +105,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             success: function(res){
 
                 $('#countryName').append("Country: ", res['data']['country'][0]['components']['country']);
+                $wikiHref = 'https://en.wikipedia.org/wiki/' + res['data']['country'][0]['components']['country'];
+                $("#wikiLink").attr("href", $wikiHref);
                 
                 $countryCode = res['data']['country'][0]['components']['ISO_3166-1_alpha-2'];
                 $('#abbreviation').append("Abbreviation: ", $countryCode);
