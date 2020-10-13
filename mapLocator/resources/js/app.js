@@ -6,18 +6,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 //Gets the map//
-   const fetchNewMap = position => {
+const fetchNewMap = position => {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
 
     //Fetches map tiles
-     satellite  = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox/satellite-v9',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: 'pk.eyJ1Ijoic3VyZmVybWF0dHkiLCJhIjoiY2tmZmNqNW5iMDJ4czJ5czVlb3d6NHE1MiJ9.LiizRcnyCW3sapN-bDONOQ'
-     });
+    satellite  = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/satellite-v9',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1Ijoic3VyZmVybWF0dHkiLCJhIjoiY2tmZmNqNW5iMDJ4czJ5czVlb3d6NHE1MiJ9.LiizRcnyCW3sapN-bDONOQ'
+    });
 
      streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -51,49 +51,42 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     fetchMap(latitude, longitude);
 
-   }
+};
 
-   //Gets the new location upon search request//
-   const searchCountry = () => {
-       const country = $('#dropDown').val();
-       $.ajax({
-           url: "resources/php/getCoords.php",
-           type: "GET",
-           dataType: "json",
-           data: {
-               countryName: country,
-           },
-
-           success: function(res){
-                featureGroup.remove();
-
-               fetchMap(res['coords']['lat'], res['coords']['lng']);
-
-           }, error: function(jqXHR, textStatus, error){
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(error);
+//Gets the new location upon search request//
+const searchCountry = () => {
+    const country = $('#dropDown').val();
+    $.ajax({
+        url: "resources/php/getCoords.php",
+        type: "GET",
+        dataType: "json",
+        data: {
+            countryName: country,
         },
-       })
-   }
 
-   //Fetches the new location and info. when called, also sets the view.//
-    const fetchMap = (latitude, longitude) => {
+        success: function(res){
+            featureGroup.remove();
 
-            featureGroup = L.featureGroup().addTo(mymap);
+            fetchMap(res['coords']['lat'], res['coords']['lng']);
 
+        }, error: function(jqXHR, textStatus, error){
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(error);
+        },
+    });
+};
 
-            
-            marker = L.marker()
-            .bindPopup()
-            .setLatLng([latitude, longitude])
-            .addTo(featureGroup);
+//Fetches the new location and info. when called, also sets the view.//
+const fetchMap = (latitude, longitude) => {
 
-            $('#markerContent').children('p').each(function () {
-                $(this).html("");
-            })
+    featureGroup = L.featureGroup().addTo(mymap);
 
-        //API to get country name and weather//
+    $('#markerContent').children('p').each(function () {
+        $(this).html("");
+    });
+
+        //API to get country name, weather, elevation & timezone//
         $.ajax({
             url: "resources/php/getCountry.php",
             type: "GET",
@@ -103,7 +96,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 lon: longitude,
             },
             success: function(res){
-
+                $('#elevation').append("Elevation : ", res['data']['elevation']);
+                $('#timezone').append("Timezone: ", res['data']['timezone'], " UTC");
+                $('#time').append("Current time: ", res['data']['time']);
                 $('#countryName').append("Country: ", res['data']['country'][0]['components']['country']);
                 $wikiHref = 'https://en.wikipedia.org/wiki/' + res['data']['country'][0]['components']['country'];
                 $("#wikiLink").attr("href", $wikiHref);
@@ -128,6 +123,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
                         $('#capital').append("Capital: ", res['data'][0]['capital']);
 
+                        $('#languages').append("Languages: ", res['data'][0]['languages']);
+
                         $('#population').append("Population: ", res['data'][0]['population']);
 
                         $('#sqArea').append("Square Area: ", res['data'][0]['areaInSqKm'],"km<sup>2</sup>");
@@ -148,6 +145,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
                                 geojson = res['border'];
                                 border = L.geoJSON(geojson).addTo(mymap).addTo(featureGroup);
+                                border.bindTooltip();
                                 mymap.fitBounds(border.getBounds());
 
                             },
@@ -170,7 +168,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             },
                             success: function(res){
                                 $('#exchangeRate').append("Exchange Rate From USD: ", res['data']);
-                                marker.setPopupContent($('#markerContent').html());
+                                border.setTooltipContent($('#markerContent').html());
                                 $('.loader-wrapper').remove();
                             },
 

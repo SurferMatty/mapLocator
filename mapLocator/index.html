@@ -6,9 +6,7 @@
         <meta charset="utf-8">
         <!--Map css & js links-->
         <link rel="stylesheet" href="resources/css/leaflet.css"/>
-        <link rel="stylsheer" href="resources/css/easy-button.css"/>
         <script src="resources/js/leaflet.js"></script>
-        <script src="resources/js/easy-button.js"></script>
 
         <!--Page styling-->
         <link href ="resources/css/bootstrap.min.css" rel ="stylesheet" type ="text/css">
@@ -24,16 +22,16 @@
     </head>
 
     <body>
-        <nav class="navbar">
-            <p id="test">Map Locator</p>
+        <nav class="navbar navbar-nav navbar-dark"> 
+            <span class="h2 text-light font-weight-bold">Map Locator</span>
 
-            <div id="teast" class="input-group mb-3">
+            <div class="input-group mb-3 border border-secondary rounded">
 
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="dropDown">Country:</label>
                 </div>
 
-                <select id="dropDown" class="custom-select" onchange="searchCountry()">
+                <select id="dropDown" class="custom-select"  onchange="searchCountry()">
 
                 <option value="AF">Afghanistan</option>
                 <option value="AL">Albania</option>
@@ -287,8 +285,12 @@
             <p id="weather"></p>
             <p id="continent"></p>
             <p id="capital"></p>
+            <p id="languages"></p>
             <p id="population"></p>
             <p id="sqArea"></p>
+            <p id="elevation"></p>
+            <p id="time"></p>
+            <p id="timezone"></p>
             <p id="exchangeRate"></p>
             <p id="flag"></p>
             <a id="wikiLink" target="_blank">Wikipedia</a>
