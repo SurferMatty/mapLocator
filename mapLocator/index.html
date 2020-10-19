@@ -15,7 +15,7 @@
         <script type = "text/javascript" src="resources/js/bootstrap.min.js"></script>
         <script type = "text/javascript" src="resources/js/app.js"></script>
 
-
+        <link rel="icon" href="resources/css/images/favicon.png" type="image/ico">
         <title>
             Map Locator
         </title>
@@ -23,7 +23,7 @@
 
     <body>
         <header>
-            <nav class="navbar navbar-light fixed-top bg-success">
+            <nav class="navbar navbar-light fixed-top bg-success shadow-border">
                     <span class="navbar-brand text-light font-weight-bold navbar-brand">Map Locator</span>
 
                         <!--<ul class="nav">
@@ -253,7 +253,6 @@
                             <option value="TH">Thailand</option>
                             <option value="TL">Timor-Leste</option>
                             <option value="TG">Togo</option>
-                            <option value="TK">Tokelau</option>
                             <option value="TO">Tonga</option>
                             <option value="TT">Trinidad and Tobago</option>
                             <option value="TN">Tunisia</option>
@@ -285,7 +284,7 @@
 
         <div id="mapid">
         </div>
-
+        <!--
         <div id="markerContent">
             <p id="countryName"></p>
             <p id="abbreviation"></p>
@@ -302,6 +301,70 @@
             <p id="flag"></p>
             <a id="wikiLink" target="_blank">Wikipedia</a>
         </div>
+    -->
+    <div  id="markerContent">
+        <table class="table table-sm table-striped table-dark">
+            <tbody id="tableContent">
+                <tr>
+                    <th scope="row">Country Name:</th>
+                    <td id="countryName"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Abbreviation:</th>
+                    <td id="abbreviation"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Weather:</th>
+                    <td id="weather"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Continent:</th>
+                    <td id="continent"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Capital:</th>
+                    <td id="capital"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Languages:</th>
+                    <td id="languages"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Population:</th>
+                    <td id="population"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Square Area:</th>
+                    <td id="sqArea"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Elevation:</th>
+                    <td id="elevation"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Current Time:</th>
+                    <td id="time"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Timezone:</th>
+                    <td id="timezone"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Exchange Rate From USD:</th>
+                    <td id="exchangeRate"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Flag:</th>
+                    <td id="flag"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Wikipedia Link:</th>
+                    <td id="wikiLink"></td>
+                    <a></a>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
         <div class="loader-wrapper">
         <span class="loader"><span class="loader-inner"></span></span>

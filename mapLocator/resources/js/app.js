@@ -82,8 +82,10 @@ const fetchMap = (latitude, longitude) => {
 
     featureGroup = L.featureGroup().addTo(mymap);
 
-    $('#markerContent').children('p').each(function () {
-        $(this).html("");
+    $('#tableContent').children('tr').each(function () {
+        $(this).children('td').each(function () {
+            $(this).html("");
+        });
     });
 
         //API to get country name, weather, elevation & timezone//
@@ -96,18 +98,19 @@ const fetchMap = (latitude, longitude) => {
                 lon: longitude,
             },
             success: function(res){
-                $('#elevation').append("Elevation : ", res['data']['elevation']);
-                $('#timezone').append("Timezone: ", res['data']['timezone'], " UTC");
-                $('#time').append("Current time: ", res['data']['time']);
-                $('#countryName').append("Country: ", res['data']['country'][0]['components']['country']);
+                $('#elevation').append(res['data']['elevation']);
+                $('#timezone').append(res['data']['timezone'], " UTC");
+                $('#time').append(res['data']['time']);
+                $('#countryName').append(res['data']['country'][0]['components']['country']);
                 $wikiHref = 'https://en.wikipedia.org/wiki/' + res['data']['country'][0]['components']['country'];
-                $("#wikiLink").attr("href", $wikiHref);
+                $('#wikiLink').append('<a href=' + $wikiHref + '>Wikipedia</a>')
+
                 
                 $countryCode = res['data']['country'][0]['components']['ISO_3166-1_alpha-2'];
-                $('#abbreviation').append("Abbreviation: ", $countryCode);
+                $('#abbreviation').append($countryCode);
                 $('#dropDown').val($countryCode);
 
-                $('#weather').append("Weather: ", res['data']['weather'][0]['description']);
+                $('#weather').append(res['data']['weather'][0]['description']);
 
                 //API call to get extra info.//
                 $.ajax({
@@ -119,18 +122,18 @@ const fetchMap = (latitude, longitude) => {
                     },
                     success: function(res){
 
-                        $('#continent').append("Continent: ", res['data'][0]['continent']);
+                        $('#continent').append(res['data'][0]['continent']);
 
-                        $('#capital').append("Capital: ", res['data'][0]['capital']);
+                        $('#capital').append(res['data'][0]['capital']);
 
-                        $('#languages').append("Languages: ", res['data'][0]['languages']);
+                        $('#languages').append(res['data'][0]['languages']);
 
-                        $('#population').append("Population: ", res['data'][0]['population']);
+                        $('#population').append(res['data'][0]['population']);
 
-                        $('#sqArea').append("Square Area: ", res['data'][0]['areaInSqKm'],"km<sup>2</sup>");
+                        $('#sqArea').append(res['data'][0]['areaInSqKm'],"km<sup>2</sup>");
 
                         const imageSrc = res['data']['flag'];
-                        $('#flag').append("Flag:<img src=" + imageSrc + " style='width: 50px; height: 50px;'>");
+                        $('#flag').append("<img src=" + imageSrc + " style='width: 50px; height: 50px;'>");
 
 
                         //Gets the country border & creates the dropdown select menu//
@@ -167,7 +170,7 @@ const fetchMap = (latitude, longitude) => {
                                 code: res['data'][0]['currencyCode'],
                             },
                             success: function(res){
-                                $('#exchangeRate').append("Exchange Rate From USD: ", res['data']);
+                                $('#exchangeRate').append(res['data']);
                                 border.setTooltipContent($('#markerContent').html());
                                 $('.loader-wrapper').remove();
                             },
