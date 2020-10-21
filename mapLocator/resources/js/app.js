@@ -5,6 +5,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 });
 
+const numAbbreviate = num => {
+    if(num >= 1000000){
+        num = (num/1000000);
+        num = Math.round(num * 100) / 100;
+        num = num + "M";
+    }else if(num >= 1000){
+        num = (num/1000)
+        num = Math.round(num * 100) / 100;
+        num = num + "K";
+    }
+    return num;
+}
+
 //Gets the map//
 const fetchNewMap = position => {
     latitude = position.coords.latitude;
@@ -136,9 +149,9 @@ const fetchMap = (latitude, longitude) => {
 
                         $('#languages').append(res['data'][0]['languages']);
 
-                        $('#population').append(res['data'][0]['population']);
+                        $('#population').append(numAbbreviate(res['data'][0]['population']));
 
-                        $('#sqArea').append(res['data'][0]['areaInSqKm'],"km<sup>2</sup>");
+                        $('#sqArea').append(numAbbreviate(res['data'][0]['areaInSqKm'])," km<sup>2</sup>");
 
                         const imageSrc = res['data']['flag'];
                         $('#flag').append("<img src=" + imageSrc + " style='width: 50px; height: 50px;'>");
@@ -191,11 +204,11 @@ const fetchMap = (latitude, longitude) => {
                                             cityMarker = new L.Marker.SVGMarker([element[1]['lat'], element[1]['lng']], { iconOptions: {color:"rgb(0, 139, 139)", shadowEnable: true, circleFillColor: "rgb(173,216,230)"}});
                                             
                                             $('#cityName').append(element[1]['name']);
-                                            $('#cityPopulation').append(element[1]['population']);
+                                            $('#cityPopulation').append(numAbbreviate(element[1]['population']));
                                             $cityWikiHref = element[1]['wikipedia'];
                                             $('#cityWiki').append('<a target="_blank" href=https://' + $cityWikiHref + '>Wikipedia</a>');
-                                            $('#cityLng').append(element[1]['lng']);
-                                            $('#cityLat').append(element[1]['lat']);
+                                            $('#cityLng').append(element[1]['lng'].toFixed(2));
+                                            $('#cityLat').append(element[1]['lat'].toFixed(2));
 
                                             cityMarker.bindPopup();
 

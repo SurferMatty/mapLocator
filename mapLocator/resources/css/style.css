@@ -18,6 +18,16 @@ a:visited{
     z-index: 1;
 }
 
+
+/*Bootstrap over-ride*/
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: #cccccc;
+}
+
+.table > tbody > tr > th{
+  font-weight: normal;
+}
+
 .loader {
     display: inline-block;
     width: 30px;
