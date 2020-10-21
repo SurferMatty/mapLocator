@@ -155,14 +155,22 @@ const fetchMap = (latitude, longitude) => {
                             success: function(res){
 
                                 geojson = res['border'];
-                                border = L.geoJSON(geojson).addTo(mymap).addTo(featureGroup);
+                                let myStyle = {
+                                    "color": "#808080",
+                                    "weight": 5,
+                                    "opacity": 0.8
+                                };
+                                border = L.geoJSON(geojson, {
+                                    style: myStyle
+                                }).addTo(mymap).addTo(featureGroup);
                                 border.bindPopup();
+                                mymap.fitBounds(border.getBounds());
+                                
                                 boundCoords = border.getBounds();
                                 let north = boundCoords['_northEast']['lat'];
                                 let east = boundCoords['_northEast']['lng'];
                                 let south = boundCoords['_southWest']['lat'];
                                 let west = boundCoords['_southWest']['lng'];
-                                mymap.fitBounds(border.getBounds());
                                 $.ajax({
                                     url: "resources/php/getPlaces.php",
                                     type: "GET",
@@ -175,14 +183,13 @@ const fetchMap = (latitude, longitude) => {
                                         countryCode: $countryCode,
                                     },
                                     success: function(res){
-                                        let newArr = Object.entries(res);
-                                        console.log(newArr);
+                                        let newArr = Object.entries(res);                                        
                                         newArr.forEach(element =>{
                                             if(element[0] !== "status"){
 
                                             $('.removeCityData').html("");
-
-                                            cityMarker = L.marker([element[1]['lat'], element[1]['lng']]);
+                                            cityMarker = new L.Marker.SVGMarker([element[1]['lat'], element[1]['lng']], { iconOptions: {color:"rgb(0, 139, 139)", shadowEnable: true, circleFillColor: "rgb(173,216,230)"}});
+                                            
                                             $('#cityName').append(element[1]['name']);
                                             $('#cityPopulation').append(element[1]['population']);
                                             $cityWikiHref = element[1]['wikipedia'];
@@ -194,8 +201,7 @@ const fetchMap = (latitude, longitude) => {
 
                                             cityMarker.setPopupContent($('#cityContent').html());
 
-                                            cityMarker.addTo(mymap);
-                                            cityMarker.addTo(featureGroup);
+                                            cityMarker.addTo(mymap).addTo(featureGroup);
 
                                             };
                                         });
