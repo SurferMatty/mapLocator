@@ -193,9 +193,7 @@
                             <option value="NI">Nicaragua</option>
                             <option value="NE">Niger</option>
                             <option value="NG">Nigeria</option>
-                            <option value="NU">Niue</option>
-                            <option value="NF">Norfolk Island</option>
-                            <option value="MP">Northern Mariana Islands</option>
+                            <option value="NU">Niue</option>    
                             <option value="NO">Norway</option>
                             <option value="OM">Oman</option>
                             <option value="PK">Pakistan</option>
@@ -214,13 +212,6 @@
                             <option value="RO">Romania</option>
                             <option value="RU">Russian Federation</option>
                             <option value="RW">Rwanda</option>
-                            <option value="BL">Saint Barthélemy</option>
-                            <option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
-                            <option value="KN">Saint Kitts and Nevis</option>
-                            <option value="LC">Saint Lucia</option>
-                            <option value="MF">Saint Martin (French part)</option>
-                            <option value="PM">Saint Pierre and Miquelon</option>
-                            <option value="VC">Saint Vincent and the Grenadines</option>
                             <option value="WS">Samoa</option>
                             <option value="SM">San Marino</option>
                             <option value="ST">Sao Tome and Principe</option>
@@ -229,20 +220,16 @@
                             <option value="RS">Serbia</option>
                             <option value="SC">Seychelles</option>
                             <option value="SL">Sierra Leone</option>
-                            <option value="SG">Singapore</option>
-                            <option value="SX">Sint Maarten (Dutch part)</option>
                             <option value="SK">Slovakia</option>
                             <option value="SI">Slovenia</option>
                             <option value="SB">Solomon Islands</option>
                             <option value="SO">Somalia</option>
                             <option value="ZA">South Africa</option>
-                            <option value="GS">South Georgia and the South Sandwich Islands</option>
                             <option value="SS">South Sudan</option>
                             <option value="ES">Spain</option>
                             <option value="LK">Sri Lanka</option>
                             <option value="SD">Sudan</option>
                             <option value="SR">Suriname</option>
-                            <option value="SJ">Svalbard and Jan Mayen</option>
                             <option value="SZ">Swaziland</option>
                             <option value="SE">Sweden</option>
                             <option value="CH">Switzerland</option>
@@ -258,7 +245,6 @@
                             <option value="TN">Tunisia</option>
                             <option value="TR">Turkey</option>
                             <option value="TM">Turkmenistan</option>
-                            <option value="TC">Turks and Caicos Islands</option>
                             <option value="TV">Tuvalu</option>
                             <option value="UG">Uganda</option>
                             <option value="UA">Ukraine</option>
@@ -269,11 +255,7 @@
                             <option value="UZ">Uzbekistan</option>
                             <option value="VU">Vanuatu</option>
                             <option value="VE">Venezuela, Bolivarian Republic of</option>
-                            <option value="VN">Viet Nam</option>
-                            <option value="VG">Virgin Islands, British</option>
-                            <option value="VI">Virgin Islands, U.S.</option>
-                            <option value="WF">Wallis and Futuna</option>
-                            <option value="EH">Western Sahara</option>
+                            <option value="VN">Vietnam</option>
                             <option value="YE">Yemen</option>
                             <option value="ZM">Zambia</option>
                             <option value="ZW">Zimbabwe</option>
@@ -302,65 +284,91 @@
             <a id="wikiLink" target="_blank">Wikipedia</a>
         </div>
     -->
-    <div  id="markerContent">
+    <div  id="countryContent">
         <table class="table table-sm table-striped table-dark">
-            <tbody id="tableContent">
+            <tbody>
                 <tr>
                     <th scope="row">Country Name:</th>
-                    <td id="countryName"></td>
+                    <td id="countryName" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Abbreviation:</th>
-                    <td id="abbreviation"></td>
+                    <td id="abbreviation" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Weather:</th>
-                    <td id="weather"></td>
+                    <td id="weather" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Continent:</th>
-                    <td id="continent"></td>
+                    <td id="continent" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Capital:</th>
-                    <td id="capital"></td>
+                    <td id="capital" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Languages:</th>
-                    <td id="languages"></td>
+                    <td id="languages" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Population:</th>
-                    <td id="population"></td>
+                    <td id="population" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Square Area:</th>
-                    <td id="sqArea"></td>
+                    <td id="sqArea" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Elevation:</th>
-                    <td id="elevation"></td>
+                    <td id="elevation" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Current Time:</th>
-                    <td id="time"></td>
+                    <td id="time" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Timezone:</th>
-                    <td id="timezone"></td>
+                    <td id="timezone" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Exchange Rate From USD:</th>
-                    <td id="exchangeRate"></td>
+                    <td id="exchangeRate" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Flag:</th>
-                    <td id="flag"></td>
+                    <td id="flag" class="removeData"></td>
                 </tr>
                 <tr>
                     <th scope="row">Wikipedia Link:</th>
-                    <td id="wikiLink"></td>
-                    <a></a>
+                    <td id="wikiLink" class="removeData"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="cityContent">
+        <table class="table table-sm table-striped table-dark">
+            <tbody>
+                <tr>
+                    <th scope="row">Name:</th>
+                    <td id="cityName" class="removeCityData">!</td>
+                </tr>
+                <tr>
+                    <th scope="row">Population:</th>
+                    <td id="cityPopulation" class="removeCityData">!</td>
+                </tr>
+                <tr>
+                    <th scope="row">Longitude:</th>
+                    <td id="cityLng" class="removeCityData">!</td>
+                </tr>
+                <tr>
+                    <th scope="row">Latitude:</th>
+                    <td id="cityLat" class="removeCityData">!</td>
+                </tr>
+                <tr>
+                    <th scope="row">Wikipedia:</th>
+                    <td id="cityWiki" class="removeCityData">!</td>
                 </tr>
             </tbody>
         </table>

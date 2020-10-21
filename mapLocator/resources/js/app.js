@@ -12,11 +12,16 @@ const fetchNewMap = position => {
 
     //Fetches map tiles
     satellite  = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox/satellite-v9',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1Ijoic3VyZmVybWF0dHkiLCJhIjoiY2tmZmNqNW5iMDJ4czJ5czVlb3d6NHE1MiJ9.LiizRcnyCW3sapN-bDONOQ'
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox/satellite-v9',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1Ijoic3VyZmVybWF0dHkiLCJhIjoiY2tmZmNqNW5iMDJ4czJ5czVlb3d6NHE1MiJ9.LiizRcnyCW3sapN-bDONOQ'
+    });
+    
+    geoWorld = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+	maxZoom: 16
     });
 
      streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -27,16 +32,23 @@ const fetchNewMap = position => {
         accessToken: 'pk.eyJ1Ijoic3VyZmVybWF0dHkiLCJhIjoiY2tmZmNqNW5iMDJ4czJ5czVlb3d6NHE1MiJ9.LiizRcnyCW3sapN-bDONOQ'
     });
 
+    nativeLan = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 19,
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+
 
     mymap = L.map('mapid', {
         zoom: 5,
-        layers: [streets, satellite],
+        layers: [streets, satellite, nativeLan, geoWorld],
     });
 
     
 	var baseLayers = {
         "Satellite": satellite,
         "Streets": streets,
+        "Native Languages": nativeLan,
+        "Geo World": geoWorld,
     };
 
 
@@ -82,11 +94,7 @@ const fetchMap = (latitude, longitude) => {
 
     featureGroup = L.featureGroup().addTo(mymap);
 
-    $('#tableContent').children('tr').each(function () {
-        $(this).children('td').each(function () {
-            $(this).html("");
-        });
-    });
+    $('.removeData').html("");
 
         //API to get country name, weather, elevation & timezone//
         $.ajax({
@@ -102,8 +110,8 @@ const fetchMap = (latitude, longitude) => {
                 $('#timezone').append(res['data']['timezone'], " UTC");
                 $('#time').append(res['data']['time']);
                 $('#countryName').append(res['data']['country'][0]['components']['country']);
-                $wikiHref = 'https://en.wikipedia.org/wiki/' + res['data']['country'][0]['components']['country'];
-                $('#wikiLink').append('<a href=' + $wikiHref + '>Wikipedia</a>')
+                $countryWikiHref = 'https://en.wikipedia.org/wiki/' + res['data']['country'][0]['components']['country'];
+                $('#wikiLink').append('<a target="_blank" href=' + $countryWikiHref + '>Wikipedia</a>')
 
                 
                 $countryCode = res['data']['country'][0]['components']['ISO_3166-1_alpha-2'];
@@ -148,8 +156,56 @@ const fetchMap = (latitude, longitude) => {
 
                                 geojson = res['border'];
                                 border = L.geoJSON(geojson).addTo(mymap).addTo(featureGroup);
-                                border.bindTooltip();
+                                border.bindPopup();
+                                boundCoords = border.getBounds();
+                                let north = boundCoords['_northEast']['lat'];
+                                let east = boundCoords['_northEast']['lng'];
+                                let south = boundCoords['_southWest']['lat'];
+                                let west = boundCoords['_southWest']['lng'];
                                 mymap.fitBounds(border.getBounds());
+                                $.ajax({
+                                    url: "resources/php/getPlaces.php",
+                                    type: "GET",
+                                    dataType: "json",
+                                    data: {
+                                        north: north,
+                                        east: east,
+                                        south: south,
+                                        west: west,
+                                        countryCode: $countryCode,
+                                    },
+                                    success: function(res){
+                                        let newArr = Object.entries(res);
+                                        console.log(newArr);
+                                        newArr.forEach(element =>{
+                                            if(element[0] !== "status"){
+
+                                            $('.removeCityData').html("");
+
+                                            cityMarker = L.marker([element[1]['lat'], element[1]['lng']]);
+                                            $('#cityName').append(element[1]['name']);
+                                            $('#cityPopulation').append(element[1]['population']);
+                                            $cityWikiHref = element[1]['wikipedia'];
+                                            $('#cityWiki').append('<a target="_blank" href=https://' + $cityWikiHref + '>Wikipedia</a>');
+                                            $('#cityLng').append(element[1]['lng']);
+                                            $('#cityLat').append(element[1]['lat']);
+
+                                            cityMarker.bindPopup();
+
+                                            cityMarker.setPopupContent($('#cityContent').html());
+
+                                            cityMarker.addTo(mymap);
+                                            cityMarker.addTo(featureGroup);
+
+                                            };
+                                        });
+                                    },
+                                    error: function(jqXHR, textStatus, error){
+                                        console.log(jqXHR);
+                                        console.log(textStatus);
+                                        console.log(error);
+                                    },
+                                });
 
                             },
 
@@ -171,7 +227,7 @@ const fetchMap = (latitude, longitude) => {
                             },
                             success: function(res){
                                 $('#exchangeRate').append(res['data']);
-                                border.setTooltipContent($('#markerContent').html());
+                                border.setPopupContent($('#countryContent').html());
                                 $('.loader-wrapper').remove();
                             },
 
